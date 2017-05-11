@@ -1,3 +1,5 @@
+// DEPRACATED
+
 var type = "WebGL"
 
 if(!PIXI.utils.isWebGLSupported()) {
@@ -18,7 +20,7 @@ var Container = PIXI.Container,
 
 // Create a stage and renderer and add to the DOM
 var stage = new Container(),
-    renderer = autoDetectRenderer(width, height, 
+    renderer = autoDetectRenderer(width, height,
         {antialias: false, transparent: false, resolution: 1});
 renderer.view.style.position = "absolute";
 renderer.view.style.display = "block";
@@ -73,7 +75,7 @@ var dotColors = [0x9966FF, 0xFF0000, 0x00FF00, 0x0000FF];
 setup();
 
 function setup() {
-  console.log("setup"); 
+  console.log("setup");
 
     // Create the dot sprites
     for (var i = 0; i < numDots; i++) {
@@ -97,7 +99,7 @@ function setup() {
 function gameLoop(){
     // Loop this function 60 times per second
     requestAnimationFrame(gameLoop);
-  
+
     // Detect collision and move the dots
     for (var i = 0; i < numDots; i++) {
         b.hit(dots[i], wallTop, true, true);
@@ -115,4 +117,3 @@ function gameLoop(){
     // Render the stage
     renderer.render(stage);
 }
-
