@@ -20,6 +20,7 @@ class Game {
     this.lineDots = [];
     this.lineColor = 0xffffff;
     this.lineGraphics = new PIXI.Graphics();
+    this.isPolygon = false;
 
     this.numDots = numDots;
     this.dotColors = dotColors;
@@ -29,6 +30,7 @@ class Game {
 
     this.tempLengthRemaining = 100;
     this.lengthRemaining = 100;
+    this.prevDist = 0;
 
     this.initWalls();
     this.initDots();
@@ -124,6 +126,7 @@ class Game {
   onDragStart(event) {
       this.lineDots = [];
       this.dragging = true;
+      this.isPolygon = false;
       this.pos = event.data.getLocalPosition(this.stage);
       let start = this.findDot(this.pos);
       if (start) {
@@ -134,6 +137,7 @@ class Game {
 
   onDragEnd() {
       this.dragging = false;
+      this.isPolygon = false;
       if (this.lineDots.length > 1) {
         let toAdd = 0;
         this.lineDots.forEach((d) => {
@@ -154,11 +158,26 @@ class Game {
           this.tempLengthRemaining = this.lengthRemaining - Math.ceil(distMult * Math.sqrt(tempDist));
           let mid = this.findDot(this.pos);
           if (mid !== undefined) {
+              // Connect dots of the same color
               if (mid.color === this.lineColor) {
-                  let dist = (mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)*(mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)
-                             + (mid.d.y - this.lineDots[this.lineDots.length - 1].d.y)*(mid.d.y - this.lineDots[this.lineDots.length - 1].d.y);
-                  this.lengthRemaining -= Math.ceil(distMult * Math.sqrt(dist));
-                  this.lineDots.push(mid);
+                  // If going backward, remove line
+                  if (mid === this.lineDots[this.lineDots.length - 2]) {
+                      this.lineDots.splice(this.lineDots.length - 1, 1);
+                      this.lengthRemaining += this.prevDist;
+                  } else {
+                      // If polygon, can't connect
+                      if (this.isPolygon) return;
+                      // Connect to new dot or to first dot (creating polygon)
+                      let idx = this.findLineDot(mid);
+                      if (idx === 0 || idx === -1) {
+                          if (idx === 0) this.isPolygon = true;
+                          let dist = (mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)*(mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)
+                                     + (mid.d.y - this.lineDots[this.lineDots.length - 1].d.y)*(mid.d.y - this.lineDots[this.lineDots.length - 1].d.y);
+                          this.prevDist = Math.ceil(distMult * Math.sqrt(dist));
+                          this.lengthRemaining -= this.prevDist;
+                          this.lineDots.push(mid);
+                      }
+                  }
               }
           }
       }
@@ -177,6 +196,15 @@ class Game {
           }
       }
       return undefined;
+  }
+
+  findLineDot(dot) {
+      for (let i = 0; i < this.lineDots.length; i++) {
+          if (this.lineDots[i] === dot) {
+              return i;
+          }
+      }
+      return -1;
   }
 }
 
