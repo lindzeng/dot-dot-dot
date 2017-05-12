@@ -1,6 +1,7 @@
 body {
   padding: 0;
   margin: 0;
+  overflow: hidden;
   font-family: "Arapey", serif;
 
   .welcomeContainer {
@@ -50,6 +51,54 @@ body {
 
         cursor: pointer;
       }
+    }
+
+  }
+
+  .gameBar {
+    position: absolute;
+    bottom: -80px;
+    left: 500px;
+
+    z-index: 2;
+
+    width: 250px;
+    // background-color: #4D4D4D;
+    // border-radius: 20px;
+
+    // padding-top: 10px;
+    // padding-bottom: 10px;
+
+    color: white;
+    font-size: 28px;
+
+    #barGraphicSVG {
+      position: absolute;
+    }
+
+    #barGraphic {
+      fill: #4D4D4D;
+      // stroke: #0000FF;
+      stroke-width: 10;
+      stroke-dasharray: 554;
+      // stroke-linecap: round;
+    }
+    #barContents {
+      padding-top: 24px;
+      position: relative;
+    }
+    #score {
+      display: inline-block;
+      width: 125px;
+      text-align: right;
+      padding-right: 5px;
+    }
+
+    #remaining {
+      display: inline-block;
+      width: 70px;
+      text-align: left;
+      padding-left: 5px;
     }
   }
 }

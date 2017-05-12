@@ -16,7 +16,7 @@ class StartMessage {
 
       $('#shade').animate({
         opacity: 0
-      }, 2000, 'linear', function() {
+      }, 1000, 'linear', function() {
         $(this).hide();
       });
 
