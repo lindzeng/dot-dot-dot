@@ -1,6 +1,6 @@
 import Dot from './Dot'
 import Wall from './Wall'
-import {bgColor, dotColors, numDots} from './Helpers';
+import {bgColor, dotColors, numDots, distMult} from './Helpers';
 
 class Game {
   constructor(stage,b, g) {
@@ -9,9 +9,9 @@ class Game {
     this.stage.interactive = true;
     this.stage.buttonMode = true;
     this.stage.on('pointerdown', this.onDragStart.bind(this))
-         .on('pointerup', this.onDragEnd.bind(this))
-         .on('pointerupoutside', this.onDragEnd.bind(this))
-         .on('pointermove', this.onDragMove.bind(this));
+        .on('pointerup', this.onDragEnd.bind(this))
+        .on('pointerupoutside', this.onDragEnd.bind(this))
+        .on('pointermove', this.onDragMove.bind(this));
     this.b = b;
 
     this.dots = [];
@@ -25,6 +25,7 @@ class Game {
     this.dotColors = dotColors;
 
     this.score = 0;
+    this.tempLengthRemaining = 100;
     this.lengthRemaining = 100;
 
     this.initWalls();
@@ -99,11 +100,11 @@ class Game {
       this.dragLine.moveTo(this.lineDots[this.lineDots.length-1].d.x, this.lineDots[this.lineDots.length-1].d.y);
       this.dragLine.lineTo(this.pos.x, this.pos.y);
       this.stage.addChild(this.dragLine);
+      this.gameBar.setPercentRemaining(this.tempLengthRemaining);
     } else {
       this.stage.removeChild(this.dragLine);
+      this.gameBar.setPercentRemaining(this.lengthRemaining);
     }
-
-    this.gameBar.setPercentRemaining(this.lengthRemaining);
   }
 
   onDragStart(event) {
@@ -128,13 +129,15 @@ class Game {
   onDragMove(event) {
       if (this.dragging) {
           this.pos = event.data.getLocalPosition(this.stage);
+          let tempDist = (this.pos.x - this.lineDots[this.lineDots.length - 1].d.x)*(this.pos.x - this.lineDots[this.lineDots.length - 1].d.x)
+                        + (this.pos.y - this.lineDots[this.lineDots.length - 1].d.y)*(this.pos.y - this.lineDots[this.lineDots.length - 1].d.y);
+          this.tempLengthRemaining = this.lengthRemaining - Math.ceil(distMult * Math.sqrt(tempDist));
           let mid = this.findDot(this.pos);
           if (mid !== undefined) {
               if (mid.color === this.lineColor) {
                   let dist = (mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)*(mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)
                              + (mid.d.y - this.lineDots[this.lineDots.length - 1].d.y)*(mid.d.y - this.lineDots[this.lineDots.length - 1].d.y);
-                  this.lengthRemaining -= Math.ceil(0.05 * Math.sqrt(dist));
-                  console.log(this.lengthRemaining);
+                  this.lengthRemaining -= Math.ceil(distMult * Math.sqrt(dist));
                   this.lineDots.push(mid);
               }
           }
