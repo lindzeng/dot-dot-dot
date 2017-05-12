@@ -25,8 +25,6 @@ import {bgColor} from './Helpers';
   let gameBar = new GameBar();
   let g = new Game(stage, b);
 
-  let displayStart = true;
-
   let startGame = () => {
     gameBar.init();
     gameBar.fillBar('white', 0);
@@ -41,8 +39,6 @@ import {bgColor} from './Helpers';
       requestAnimationFrame(render);
       g.step();
       renderer.render(stage);
-      if (!displayStart) {
-      }
   }
 
   render();

@@ -58,6 +58,14 @@ class Game {
         this.b.hit(d, this.dots[j].getGraphics()[0], true, true);
       }
       this.dots[i].step();
+
+      if (this.dots[i].dead) {
+        this.dots[i].getGraphics().forEach(e => this.stage.removeChild(e));
+      }
+
+      if (Math.random() > .999) {
+        this.dots[i].kill();
+      }
     }
   }
 }
