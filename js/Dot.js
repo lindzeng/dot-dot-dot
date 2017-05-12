@@ -1,3 +1,5 @@
+import {scoreMult} from './Helpers';
+
 class Dot {
   constructor(color, pos, rad) {
     this.color = color ? color : 0xFF0000;
@@ -5,6 +7,8 @@ class Dot {
     let p = pos ? pos : [Math.random() * window.innerWidth, Math.random() * window.innerHeight];
 
     this.scale = 0;
+
+    this.value = this.rad*scoreMult;
 
     this.d = new PIXI.Graphics();
     this.d.beginFill(this.color);
@@ -75,6 +79,7 @@ class Dot {
 
   kill() {
     this.killed = true;
+    return this.value;
   }
 
 }

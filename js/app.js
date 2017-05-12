@@ -28,7 +28,7 @@ import {bgColor} from './Helpers';
   let startGame = () => {
     gameBar.init();
     gameBar.fillBar('white', 0);
-    gameBar.addScore(0);
+    gameBar.setScore(0);
     gameBar.setPercentRemaining(100);
   }
   let start = new StartMessage(startGame.bind(this));

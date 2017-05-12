@@ -1,6 +1,6 @@
 import Dot from './Dot'
 import Wall from './Wall'
-import {bgColor, dotColors, numDots, distMult} from './Helpers';
+import {bgColor, dotColors, numDots, distMult, pathBonusLength} from './Helpers';
 
 class Game {
   constructor(stage,b, g) {
@@ -25,6 +25,8 @@ class Game {
     this.dotColors = dotColors;
 
     this.score = 0;
+    this.scoreMultiplier = 1;
+
     this.tempLengthRemaining = 100;
     this.lengthRemaining = 100;
 
@@ -92,6 +94,7 @@ class Game {
     }
     this.lineGraphics.endFill();
     this.stage.addChild(this.lineGraphics);
+    this.updateScoreMultiplier();
 
     if (this.dragging) {
       this.stage.removeChild(this.dragLine);
@@ -104,6 +107,17 @@ class Game {
     } else {
       this.stage.removeChild(this.dragLine);
       this.gameBar.setPercentRemaining(this.lengthRemaining);
+    }
+  }
+
+  updateScoreMultiplier() {
+    if (this.lineDots.length >= 1) {
+      let frac = this.lineDots.length/pathBonusLength;
+      this.scoreMultiplier = 1 + frac*2;
+      this.gameBar.fillBar(this.lineColor, frac*100.0);
+    } else {
+      this.scoreMultiplier = 1;
+      this.gameBar.fillBar(this.lineColor, 0);
     }
   }
 
@@ -121,7 +135,13 @@ class Game {
   onDragEnd() {
       this.dragging = false;
       if (this.lineDots.length > 1) {
-        this.lineDots.forEach(d => d.kill());
+        let toAdd = 0;
+        this.lineDots.forEach((d) => {
+          toAdd += d.kill();
+        });
+
+        this.score += toAdd*this.scoreMultiplier;
+        this.gameBar.setScore(this.score);
       }
       this.lineDots = [];
   }

@@ -16,19 +16,21 @@ class GameBar {
   }
 
   fillBar(color, fillPercentage) {
+    color = "#" + color.toString(16);
+    fillPercentage = Math.min(Math.max(fillPercentage, 0.0), 100.0);
     let m = this.pathLength/(-100.0);
     let y = m*fillPercentage+this.pathLength;
     $('#bar').css({stroke: color, "stroke-dashoffset": y});
   }
 
-  addScore(incrementScore) {
-    this.score = this.prevScore + incrementScore;
+  setScore(newScore) {
+    this.score = parseFloat(newScore).toFixed(0);
     $({countNum: this.prevScore}).animate({countNum: this.score}, {
-      duration: 500,
+      duration: 250,
       easing:'linear',
       step: function() {
         // What todo on every count
-        $('#score').text(this.countNum.toFixed(0));
+        $('#score').text(parseFloat(this.countNum).toFixed(0));
       },
       complete: () => {
         $('#score').text(this.score);
@@ -38,6 +40,7 @@ class GameBar {
   }
 
   setPercentRemaining(remain) {
+    remain = Math.min(Math.max(remain, 0), 100);
     $('#remaining').text(remain + '%');
     if (remain <= 20) {
       $('#remaining').css({color: 'red'});
