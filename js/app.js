@@ -38,6 +38,9 @@ import {bgColor} from './Helpers';
   let render = () => {
       requestAnimationFrame(render);
       g.step();
+      if(g.checkEndGame()) {
+        // Do something;
+      }
       renderer.render(stage);
   }
 

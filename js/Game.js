@@ -73,6 +73,14 @@ class Game {
     this.renderDragLine();
   }
 
+  checkEndGame() {
+    // Check if # of dots of each color are all 1
+    //
+    // OR
+    //
+    // No line left
+    return false;
+  }
 
   renderDots() {
     this.dots.forEach((d, i) => {
