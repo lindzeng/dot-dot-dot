@@ -106,7 +106,8 @@ class Game {
       this.lineDots = [];
       console.log("in drag start");
       this.dragging = true;
-      let start = this.findDot(event.data.getLocalPosition(this.stage));
+      this.pos = event.data.getLocalPosition(this.stage);
+      let start = this.findDot(this.pos);
       if (start) {
         this.lineDots.push(start);
         this.lineColor = start.color;
@@ -127,7 +128,7 @@ class Game {
       if (this.dragging) {
           console.log("in drag move");
           this.pos = event.data.getLocalPosition(this.stage);
-          let mid = this.findDot({ x: this.pos.x, y:this.pos.y });
+          let mid = this.findDot(this.pos);
           if (mid !== undefined) {
               if (mid.color === this.lineColor) {
                   this.lineDots.push(mid);
