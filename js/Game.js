@@ -36,6 +36,14 @@ class Game {
     this.initDots();
   }
 
+  getScore() {
+    return this.score;
+  }
+
+  killAll() {
+      this.dots.forEach(d => d.kill());
+  }
+
   initDots() {
     for (let i = 0; i < this.numDots; i++) {
       let d = new Dot(this.dotColors[Math.floor(Math.random() * this.dotColors.length)]);

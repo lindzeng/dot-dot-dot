@@ -12,6 +12,24 @@ body {
     user-select: none;
   }
 
+  .button {
+    margin-top: 70px;
+    margin-left: 200px;
+    margin-right: 200px;
+
+    padding-top: 20px;
+    padding-bottom: 30px;
+
+    border-radius: 50px;
+    font-size: 48px;
+    text-align: center;
+
+    background-color: #4D4D4D;
+    color: white;
+
+    cursor: pointer;
+  }
+
   .welcomeContainer {
     width: 100vw;
     height: 100vh;
@@ -42,27 +60,46 @@ body {
         font-size: 28px;
         text-align: center;
       }
-      #buttonDiv {
-        margin-top: 70px;
-        margin-left: 200px;
-        margin-right: 200px;
-
-        padding-top: 20px;
-        padding-bottom: 30px;
-
-        border-radius: 50px;
-        font-size: 48px;
-        text-align: center;
-
-        background-color: #4D4D4D;
-        color: white;
-
-        cursor: pointer;
-      }
     }
 
   }
 
+  .gameEndContainer {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .5);
+
+    display: none;
+    opacity: 0;
+
+    position: absolute;
+
+    z-index: 1;
+
+    .end {
+      position: absolute;
+
+      left: 25vw;
+      top: -550px;
+
+      padding-top: 175px;
+      width: 600px;
+      height: 530px;
+      background-image: url("../img/end.svg"), none;
+      background-repeat: no-repeat;
+
+      #endText {
+        font-size: 96px;
+        text-align: center;
+      }
+      #endScoreText {
+        padding-top: 5px;
+        font-size: 28px;
+        text-align: center;
+      }
+    }
+
+  }
   .gameBar {
     position: absolute;
     bottom: -80px;

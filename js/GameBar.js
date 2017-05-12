@@ -5,8 +5,7 @@ class GameBar {
     $('#bar').css({left: width/2-125, bottom: -80});
 
     this.pathLength = 554;
-    this.prevScore = 0;
-    this.score = 0;
+    this.restart();
   }
 
   init() {
@@ -47,6 +46,13 @@ class GameBar {
     } else {
       $('#remaining').css({color: 'white'});
     }
+  }
+
+  restart() {
+    this.prevScore = 0;
+    this.score = 0;
+    $('#score').text(this.score);
+    $('#remaining').text('100%');
   }
 }
 

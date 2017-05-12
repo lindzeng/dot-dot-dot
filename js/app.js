@@ -1,5 +1,6 @@
 import Game from './Game';
 import StartMessage from './StartMessage';
+import EndMessage from './EndMessage';
 import GameBar from './GameBar';
 import {bgColor} from './Helpers';
 
@@ -31,16 +32,35 @@ import {bgColor} from './Helpers';
     gameBar.setScore(0);
     gameBar.setPercentRemaining(100);
   }
-  let start = new StartMessage(startGame.bind(this));
 
-  // let i = new Interface()
+  let restart = false;
+  let end = null;
+  let restartGame = () => {
+    g.killAll();
+    restart = true;
+  }
+
+  let start = new StartMessage(startGame.bind(this));
 
   let render = () => {
       requestAnimationFrame(render);
       g.step();
       if(g.checkEndGame()) {
-        // Do something;
+        if (!end) {
+          end = new EndMessage(g.getScore(), restartGame.bind(this));
+        }
       }
+
+      if (restart) {
+        if (g.numDots == 0) {
+          gameBar.restart();
+          stage = new PIXI.Container();
+          g = new Game(stage, b, gameBar);
+          end = null;
+          restart = false;
+        }
+      }
+
       renderer.render(stage);
   }
 
