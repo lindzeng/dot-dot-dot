@@ -23,7 +23,7 @@ import {bgColor} from './Helpers';
   let b = new Bump(PIXI);
 
   let gameBar = new GameBar();
-  let g = new Game(stage, b);
+  let g = new Game(stage, b, gameBar);
 
   let startGame = () => {
     gameBar.init();

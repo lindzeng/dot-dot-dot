@@ -3,8 +3,9 @@ import Wall from './Wall'
 import {bgColor, dotColors, numDots} from './Helpers';
 
 class Game {
-  constructor(stage,b) {
+  constructor(stage,b, g) {
     this.stage = stage;
+    this.gameBar = g;
     this.stage.interactive = true;
     this.stage.buttonMode = true;
     this.stage.on('pointerdown', this.onDragStart.bind(this))
@@ -80,14 +81,12 @@ class Game {
     // Render line graphics
     this.stage.removeChild(this.lineGraphics);
     this.lineGraphics = new PIXI.Graphics();
-    // this.lineGraphics.lineStyle(5, this.lineColor, 1);
     this.lineGraphics.lineStyle(.5, 0x000000);
     for (let i = 0; i < this.lineDots.length - 1; i++) {
         this.lineGraphics.moveTo(this.lineDots[i].d.x, this.lineDots[i].d.y);
         this.lineGraphics.lineTo(this.lineDots[i+1].d.x, this.lineDots[i+1].d.y);
     }
     this.lineGraphics.endFill();
-    // this.stage.addChildAt(this.lineGraphics, this.stage.children.length -1);
     this.stage.addChild(this.lineGraphics);
 
     if (this.dragging) {
@@ -100,11 +99,12 @@ class Game {
     } else {
       this.stage.removeChild(this.dragLine);
     }
+
+    this.gameBar.setPercentRemaining(this.lengthRemaining);
   }
 
   onDragStart(event) {
       this.lineDots = [];
-      console.log("in drag start");
       this.dragging = true;
       this.pos = event.data.getLocalPosition(this.stage);
       let start = this.findDot(this.pos);
@@ -115,39 +115,26 @@ class Game {
   }
 
   onDragEnd() {
-      // console.log("in drag end");
       this.dragging = false;
       if (this.lineDots.length > 1) {
         this.lineDots.forEach(d => d.kill());
       }
       this.lineDots = [];
-      // console.log(this.lineDots);
   }
 
   onDragMove(event) {
       if (this.dragging) {
-          console.log("in drag move");
           this.pos = event.data.getLocalPosition(this.stage);
           let mid = this.findDot(this.pos);
           if (mid !== undefined) {
               if (mid.color === this.lineColor) {
+                  let dist = (mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)*(mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)
+                             + (mid.d.y - this.lineDots[this.lineDots.length - 1].d.y)*(mid.d.y - this.lineDots[this.lineDots.length - 1].d.y);
+                  this.lengthRemaining -= Math.ceil(0.05 * Math.sqrt(dist));
+                  console.log(this.lengthRemaining);
                   this.lineDots.push(mid);
               }
           }
-
-
-          // let lineTrail = new PIXI.Container();
-          // lineTrail.addChild(graphics);
-          // graphics.drawCircle(0, 0, 7);
-          //
-          // TweenMax.set(lineTrail.position, { x:pos.x, y:pos.y });
-          // TweenMax.set(lineTrail, { alpha:0 });
-          // TweenMax.set(lineTrail.scale, { x:0.5, y:0.5 });
-          //
-          // TweenMax.to(lineTrail, 1, {  alpha:Math.random() * 0.5 + 0.5, ease:Expo.easeOut } );
-          // TweenMax.to(lineTrail.scale, 3, { x:0, y:0, ease:Expo.easeOut, delay:1.5, onComplete:this.remove.bind(this), onCompleteParams:[graphics, lineTrail]});
-
-          // this.stage.addChild(lineTrail);
       }
   }
 
@@ -155,7 +142,7 @@ class Game {
       for (let i = 0; i < this.numDots; i++) {
           let snapPos = { x:this.dots[i].d.x, y:this.dots[i].d.y };
           let rad = this.dots[i].rad;
-          var dist = (pos.x-snapPos.x)*(pos.x-snapPos.x) +
+          let dist = (pos.x-snapPos.x)*(pos.x-snapPos.x) +
                      (pos.y-snapPos.y)*(pos.y-snapPos.y);
           if (dist <= rad*rad) {
               if (this.dots[i] !== this.lineDots[this.lineDots.length - 1]) {
@@ -165,14 +152,6 @@ class Game {
       }
       return undefined;
   }
-
-  // remove(graphics, lineTrail) {
-  //     if (graphics !== null && lineTrail !== null) lineTrail.removeChild(graphics);
-  //     graphics.clear();
-  //     graphics = null;
-  //     this.stage.removeChild(lineTrail);
-  //     lineTrail = null;
-  //   }
 }
 
 export default Game;
