@@ -162,6 +162,7 @@ class Game {
               if (mid.color === this.lineColor) {
                   // If going backward, remove line
                   if (mid === this.lineDots[this.lineDots.length - 2]) {
+                      this.isPolygon = false;
                       this.lineDots.splice(this.lineDots.length - 1, 1);
                       this.lengthRemaining += this.prevDist;
                   } else {
