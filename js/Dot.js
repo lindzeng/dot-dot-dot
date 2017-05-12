@@ -34,7 +34,6 @@ class Dot {
   getGraphics() {
     return [this.d, this.o];
   }
-
 }
 
 export default Dot;

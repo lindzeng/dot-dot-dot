@@ -109,7 +109,7 @@ stage.addChild(about, message);
 var dragLine = {
     graphics:new Graphics(),
     length:0,
-    start:{x:-1,y:-1}
+    prevPos:{x:-1,y:-1}
 };
 
 function setup() {
@@ -122,10 +122,11 @@ function setup() {
         d.beginFill(dotColors[Math.floor(Math.random() * dotColors.length)]);
         d.drawCircle(0, 0, 15);
         d.endFill();
+        d.r = 15;
         d.x = Math.random() * window.innerWidth;
         d.y = Math.random() * window.innerHeight;
-        d.vx = Math.random() * 0;
-        d.vy = Math.random() * 0;
+        d.vx = Math.random() * 3;
+        d.vy = Math.random() * 3;
         d.circular = true;
 
         if (gameStart) {
@@ -173,11 +174,10 @@ function onDragStart(event) {
     this.alpha = 0.5;
     this.dragging = true;
 
-    var position = event.data.getLocalPosition(this.parent);
-    dragLine.start = position;
-    dragLine.graphics = new Graphics();
-    dragLine.graphics.lineStyle(5, 0xffd900, 1);
-    dragLine.graphics.moveTo(position.x,position.y);
+    //dragLine.prevPos = { x: this.x, y: this.y };
+    //dragLine.graphics = new Graphics();
+    //stage.addChild(dragLine.graphics);
+    //dragLine.graphics.lineStyle(5, 0xffd900, 1);
 }
 
 function onDragEnd() {
@@ -185,24 +185,30 @@ function onDragEnd() {
     this.dragging = false;
     this.data = null;
     dragLine.graphics.endFill();
-    stage.addChild(dragLine.graphics);
 }
 
 function onDragMove() {
     if (this.dragging) {
         var newPosition = this.data.getLocalPosition(this.parent);
-        if (snapTo(newPosition) !== undefined) {
-            dragLine.graphics.lineTo(newPosition.x, newPosition.y);
+        var snapPosition = snapTo(this, newPosition);
+        if (snapPosition !== undefined) {
+            dragLine.graphics.moveTo(dragLine.prevPos.x, dragLine.prevPos.y);
+            dragLine.graphics.lineTo(snapPosition.x, snapPosition.y);
+            dragLine.prevPos = newPosition;
         }
-        //this.x = newPosition.x;
-        //this.y = newPosition.y;
     }
 }
 
-function snapTo(position) {
+function snapTo(dot, position) {
     for (var i = 0; i < numDots; i++) {
-        var snapPosition = { dots[i].x, dots[i].y };
-        var dist = position.x
+        if (dots[i] === dot) continue;
+        var snapPosition = { x:dots[i].x, y:dots[i].y };
+        var rad = dots[i].r;
+        var dist = (position.x-snapPosition.x)*(position.x-snapPosition.x) +
+                   (position.y-snapPosition.y)*(position.y-snapPosition.y)
+        if (dist <= rad*rad) {
+            return snapPosition;
+        }
     }
     return undefined;
 }
