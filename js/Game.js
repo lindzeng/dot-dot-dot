@@ -75,9 +75,6 @@ class Game {
         this.dots[i].getGraphics().forEach(e => this.stage.removeChild(e));
       }
 
-      if (Math.random() > .999) {
-        this.dots[i].kill();
-      }
     }
 
     // Render line graphics
@@ -86,12 +83,23 @@ class Game {
     // this.lineGraphics.lineStyle(5, this.lineColor, 1);
     this.lineGraphics.lineStyle(.5, 0x000000);
     for (let i = 0; i < this.lineDots.length - 1; i++) {
-        this.lineGraphics.moveTo(this.lineDots[i].x, this.lineDots[i].y);
-        this.lineGraphics.lineTo(this.lineDots[i+1].x, this.lineDots[i+1].y);
+        this.lineGraphics.moveTo(this.lineDots[i].d.x, this.lineDots[i].d.y);
+        this.lineGraphics.lineTo(this.lineDots[i+1].d.x, this.lineDots[i+1].d.y);
     }
     this.lineGraphics.endFill();
     // this.stage.addChildAt(this.lineGraphics, this.stage.children.length -1);
     this.stage.addChild(this.lineGraphics);
+
+    if (this.dragging) {
+      this.stage.removeChild(this.dragLine);
+      this.dragLine = new PIXI.Graphics();
+      this.dragLine.lineStyle(.5, 0x000000);
+      this.dragLine.moveTo(this.lineDots[this.lineDots.length-1].d.x, this.lineDots[this.lineDots.length-1].d.y);
+      this.dragLine.lineTo(this.pos.x, this.pos.y);
+      this.stage.addChild(this.dragLine);
+    } else {
+      this.stage.removeChild(this.dragLine);
+    }
   }
 
   onDragStart(event) {
@@ -99,40 +107,46 @@ class Game {
       console.log("in drag start");
       this.dragging = true;
       let start = this.findDot(event.data.getLocalPosition(this.stage));
-      this.lineDots.push(start.d);
-      this.lineColor = start.color;
+      if (start) {
+        this.lineDots.push(start);
+        this.lineColor = start.color;
+      }
   }
 
   onDragEnd() {
-      console.log("in drag end");
+      // console.log("in drag end");
       this.dragging = false;
-      console.log(this.lineDots);
+      if (this.lineDots.length > 1) {
+        this.lineDots.forEach(d => d.kill());
+      }
+      this.lineDots = [];
+      // console.log(this.lineDots);
   }
 
   onDragMove(event) {
       if (this.dragging) {
           console.log("in drag move");
-          let pos = event.data.getLocalPosition(this.stage);
-          let mid = this.findDot({ x: pos.x, y:pos.y });
+          this.pos = event.data.getLocalPosition(this.stage);
+          let mid = this.findDot({ x: this.pos.x, y:this.pos.y });
           if (mid !== undefined) {
               if (mid.color === this.lineColor) {
-                  this.lineDots.push(mid.d);
+                  this.lineDots.push(mid);
               }
           }
-          let graphics = new PIXI.Graphics();
-          graphics.lineStyle(1, 0x000000);
-          let lineTrail = new PIXI.Container();
-          lineTrail.addChild(graphics);
-          graphics.drawCircle(0, 0, 7);
 
-          TweenMax.set(lineTrail.position, { x:pos.x, y:pos.y });
-          TweenMax.set(lineTrail, { alpha:0 });
-          TweenMax.set(lineTrail.scale, { x:0.5, y:0.5 });
 
-          TweenMax.to(lineTrail, 1, {  alpha:Math.random() * 0.5 + 0.5, ease:Expo.easeOut } );
-          TweenMax.to(lineTrail.scale, 3, { x:0, y:0, ease:Expo.easeOut, delay:1.5, onComplete:this.remove.bind(this), onCompleteParams:[graphics, lineTrail]});
+          // let lineTrail = new PIXI.Container();
+          // lineTrail.addChild(graphics);
+          // graphics.drawCircle(0, 0, 7);
+          //
+          // TweenMax.set(lineTrail.position, { x:pos.x, y:pos.y });
+          // TweenMax.set(lineTrail, { alpha:0 });
+          // TweenMax.set(lineTrail.scale, { x:0.5, y:0.5 });
+          //
+          // TweenMax.to(lineTrail, 1, {  alpha:Math.random() * 0.5 + 0.5, ease:Expo.easeOut } );
+          // TweenMax.to(lineTrail.scale, 3, { x:0, y:0, ease:Expo.easeOut, delay:1.5, onComplete:this.remove.bind(this), onCompleteParams:[graphics, lineTrail]});
 
-          this.stage.addChild(lineTrail);
+          // this.stage.addChild(lineTrail);
       }
   }
 
@@ -143,7 +157,7 @@ class Game {
           var dist = (pos.x-snapPos.x)*(pos.x-snapPos.x) +
                      (pos.y-snapPos.y)*(pos.y-snapPos.y);
           if (dist <= rad*rad) {
-              if (this.dots[i].d !== this.lineDots[this.lineDots.length - 1]) {
+              if (this.dots[i] !== this.lineDots[this.lineDots.length - 1]) {
                    return this.dots[i];
               }
           }
@@ -151,13 +165,13 @@ class Game {
       return undefined;
   }
 
-  remove(graphics, lineTrail) {
-      if (graphics !== null && lineTrail !== null) lineTrail.removeChild(graphics);
-      graphics.clear();
-      graphics = null;
-      this.stage.removeChild(lineTrail);
-      lineTrail = null;
-    }
+  // remove(graphics, lineTrail) {
+  //     if (graphics !== null && lineTrail !== null) lineTrail.removeChild(graphics);
+  //     graphics.clear();
+  //     graphics = null;
+  //     this.stage.removeChild(lineTrail);
+  //     lineTrail = null;
+  //   }
 }
 
 export default Game;
