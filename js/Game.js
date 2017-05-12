@@ -59,24 +59,27 @@ class Game {
 
   step() {
     // Render dot graphics
-    for (let i = 0; i < this.numDots; i++) {
-      let d = this.dots[i].getGraphics()[0];
+    this.dots.forEach((d, i) => {
+      let dot = d.getGraphics()[0];
 
-      // Detect collisions
       for (let j = 0; j < this.walls.length; j++) {
-        this.b.hit(d, this.walls[j].getGraphics(), true, true);
+        this.b.hit(dot, this.walls[j].getGraphics(), true, true);
       }
+
       for (let j = 0; j < this.numDots; j++) {
         if (i === j) continue;
-        this.b.hit(d, this.dots[j].getGraphics()[0], true, true);
-      }
-      this.dots[i].step();
-
-      if (this.dots[i].dead) {
-        this.dots[i].getGraphics().forEach(e => this.stage.removeChild(e));
+        this.b.hit(dot, this.dots[j].getGraphics()[0], true, true);
       }
 
-    }
+      d.step();
+
+      if (d.dead) {
+        d.getGraphics().forEach(e => this.stage.removeChild(e));
+        this.dots.splice(i, 1);
+        this.numDots -= 1;
+      }
+
+    });
 
     // Render line graphics
     this.stage.removeChild(this.lineGraphics);
