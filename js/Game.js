@@ -64,6 +64,17 @@ class Game {
 
   step() {
     // Render dot graphics
+    this.renderDots();
+
+    // Render line graphics
+    this.renderLine();
+    this.updateScoreMultiplier();
+
+    this.renderDragLine();
+  }
+
+
+  renderDots() {
     this.dots.forEach((d, i) => {
       let dot = d.getGraphics()[0];
 
@@ -85,8 +96,9 @@ class Game {
       }
 
     });
+  }
 
-    // Render line graphics
+  renderLine() {
     this.stage.removeChild(this.lineGraphics);
     this.lineGraphics = new PIXI.Graphics();
     this.lineGraphics.lineStyle(.5, 0x000000);
@@ -96,8 +108,9 @@ class Game {
     }
     this.lineGraphics.endFill();
     this.stage.addChild(this.lineGraphics);
-    this.updateScoreMultiplier();
+  }
 
+  renderDragLine() {
     if (this.dragging) {
       this.stage.removeChild(this.dragLine);
       this.dragLine = new PIXI.Graphics();
