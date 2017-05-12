@@ -1,4 +1,6 @@
 import Game from './Game';
+import StartMessage from './StartMessage';
+import GameBar from './GameBar';
 import {bgColor} from './Helpers';
 
 (() => {
@@ -19,7 +21,19 @@ import {bgColor} from './Helpers';
   document.body.appendChild(renderer.view);
 
   let b = new Bump(PIXI);
+
+  let gameBar = new GameBar();
   let g = new Game(stage, b);
+
+  let startGame = () => {
+    gameBar.init();
+    gameBar.fillBar('white', 0);
+    gameBar.addScore(0);
+    gameBar.setPercentRemaining(100);
+  }
+  let start = new StartMessage(startGame.bind(this));
+
+  // let i = new Interface()
 
   let render = () => {
       requestAnimationFrame(render);
