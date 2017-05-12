@@ -1,4 +1,5 @@
 import Game from './Game';
+import StartMessage from './StartMessage';
 import {bgColor} from './Helpers';
 
 (() => {
@@ -21,10 +22,21 @@ import {bgColor} from './Helpers';
   let b = new Bump(PIXI);
   let g = new Game(stage, b);
 
+  let displayStart = true;
+
+  let startGame = () => {
+    console.log('begin game!');
+  }
+  let start = new StartMessage(startGame.bind(this));
+
+  // let i = new Interface()
+
   let render = () => {
       requestAnimationFrame(render);
       g.step();
       renderer.render(stage);
+      if (!displayStart) {
+      }
   }
 
   render();

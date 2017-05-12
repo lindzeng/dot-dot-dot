@@ -1,3 +1,10 @@
+// DO NOT USE
+// DO NOT USE
+// DO NOT USE
+// DO NOT USE
+// DO NOT USE
+
+
 var type = "WebGL"
 
 if(!PIXI.utils.isWebGLSupported()) {

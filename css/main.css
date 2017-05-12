@@ -1,5 +1,40 @@
 body {
   padding: 0;
-  margin: 0; }
+  margin: 0;
+  font-family: "Arapey", serif; }
+  body .welcomeContainer {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.5);
+    position: absolute;
+    z-index: 1; }
+    body .welcomeContainer .start {
+      position: absolute;
+      left: 25vw;
+      top: -530px;
+      padding-top: 175px;
+      width: 600px;
+      height: 530px;
+      background-image: url("../img/welcome.svg"), none;
+      background-repeat: no-repeat; }
+      body .welcomeContainer .start #title {
+        font-size: 96px;
+        text-align: center; }
+      body .welcomeContainer .start #about {
+        padding-top: 5px;
+        font-size: 28px;
+        text-align: center; }
+      body .welcomeContainer .start #buttonDiv {
+        margin-top: 70px;
+        margin-left: 200px;
+        margin-right: 200px;
+        padding-top: 20px;
+        padding-bottom: 30px;
+        border-radius: 50px;
+        font-size: 48px;
+        text-align: center;
+        background-color: #4D4D4D;
+        color: white;
+        cursor: pointer; }
 
 /*# sourceMappingURL=main.css.map */
