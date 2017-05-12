@@ -1,5 +1,3 @@
-// DEPRACATED
-
 var type = "WebGL"
 
 if(!PIXI.utils.isWebGLSupported()) {
@@ -17,6 +15,7 @@ var Container = PIXI.Container,
     TextureCache = PIXI.utils.TextureCache,
     Sprite = PIXI.Sprite;
     Graphics = PIXI.Graphics;
+    Text = PIXI.Text;
 
 // Create a stage and renderer and add to the DOM
 var stage = new Container(),
@@ -74,8 +73,48 @@ var dots = [];
 var dotColors = [0x9966FF, 0xFF0000, 0x00FF00, 0x0000FF];
 setup();
 
+// Starting message
+var gameStart = false;
+var about = new Text(
+    "dot-dot-dot\na game by eric li, lindy zeng, and kaijia tian\ncos 426 spring 2017",
+    {fontFamily: "Consolas", fontSize: 18, fill: "gray", align: "center"}
+);
+about.anchor.x = 0.5;
+about.position.set(window.innerWidth/2, window.innerHeight/2 - 100);
+var message = new Text(
+  "click to start",
+  {fontFamily: "Consolas", fontSize: 32, fill: "gray", align: "center"}
+);
+message.anchor.x = 0.5;
+message.interactive = true;
+message.mouseover = function() {
+    message.alpha = 0.5;
+}
+message.mouseout = function() {
+    message.alpha = 1;
+}
+message.click = function() {
+    message = null;
+    gameStart = true;
+    for (var i = stage.children.length - 1; i >= 3; i--) {
+        dots = [];
+        stage.removeChild(stage.children[i]);
+    };
+    setup();
+}
+message.position.set(window.innerWidth/2, window.innerHeight/2);
+stage.addChild(about, message);
+
+// Draw lines
+var dragLine = {
+    graphics:new Graphics(),
+    length:0,
+    start:{x:-1,y:-1}
+};
+
 function setup() {
   console.log("setup");
+  console.log(gameStart);
 
     // Create the dot sprites
     for (var i = 0; i < numDots; i++) {
@@ -85,9 +124,19 @@ function setup() {
         d.endFill();
         d.x = Math.random() * window.innerWidth;
         d.y = Math.random() * window.innerHeight;
-        d.vx = Math.random() * 10;
-        d.vy = Math.random() * 10;
+        d.vx = Math.random() * 0;
+        d.vy = Math.random() * 0;
         d.circular = true;
+
+        if (gameStart) {
+            d.interactive = true;
+            d.buttonMode = true;
+            d.on('pointerdown', onDragStart)
+             .on('pointerup', onDragEnd)
+             .on('pointerupoutside', onDragEnd)
+             .on('pointermove', onDragMove);
+         }
+
         dots.push(d);
         stage.addChild(d);
     }
@@ -116,4 +165,44 @@ function gameLoop(){
 
     // Render the stage
     renderer.render(stage);
+}
+
+// Pointer events
+function onDragStart(event) {
+    this.data = event.data;
+    this.alpha = 0.5;
+    this.dragging = true;
+
+    var position = event.data.getLocalPosition(this.parent);
+    dragLine.start = position;
+    dragLine.graphics = new Graphics();
+    dragLine.graphics.lineStyle(5, 0xffd900, 1);
+    dragLine.graphics.moveTo(position.x,position.y);
+}
+
+function onDragEnd() {
+    this.alpha = 1;
+    this.dragging = false;
+    this.data = null;
+    dragLine.graphics.endFill();
+    stage.addChild(dragLine.graphics);
+}
+
+function onDragMove() {
+    if (this.dragging) {
+        var newPosition = this.data.getLocalPosition(this.parent);
+        if (snapTo(newPosition) !== undefined) {
+            dragLine.graphics.lineTo(newPosition.x, newPosition.y);
+        }
+        //this.x = newPosition.x;
+        //this.y = newPosition.y;
+    }
+}
+
+function snapTo(position) {
+    for (var i = 0; i < numDots; i++) {
+        var snapPosition = { dots[i].x, dots[i].y };
+        var dist = position.x
+    }
+    return undefined;
 }

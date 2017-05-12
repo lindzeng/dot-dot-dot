@@ -15,7 +15,7 @@ class Dot {
     this.d.circular = true;
 
     this.o = new PIXI.Graphics();
-    this.o.lineStyle(.5, 0x000000);  //(thickness, color)
+    this.o.lineStyle(.5, 0x000000);  // (thickness, color)
     this.o.drawCircle(0, 0, this.rad);
     this.o.endFill();
     this.o.x = p[0] - this.d.vx*2;
