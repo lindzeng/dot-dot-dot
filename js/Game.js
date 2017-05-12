@@ -84,13 +84,13 @@ class Game {
   checkEndGame() {
     // Check if # of dots of each color are all 1
     let isOnlyColor = [];
-    let numAlive = 0;
+    // let numAlive = 0;
     for (let i = 0; i < this.dotColors.length; i++) {
         isOnlyColor.push(false);
     }
     for (let i = 0; i < this.numDots.length; i++) {
         if (!this.dots[i].killed) {
-            numAlive += 1;
+            // numAlive += 1;
             let color = this.dots[i].color;
             let idx = this.getColorIdx(color);
             if (isOnlyColor[idx]) {
@@ -105,7 +105,7 @@ class Game {
     if (this.lengthRemaining <= 0) return true;
 
     // OR all dots killed
-    if (numAlive === 0) return true;
+    if (this.numAlive === 0) return true;
 
     return false;
   }
