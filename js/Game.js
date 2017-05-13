@@ -1,6 +1,6 @@
 import Dot from './Dot'
 import Wall from './Wall'
-import { bgColor, dotColors, numDots, distMult, pathBonusLength, collideCircs, collideWalls } from './Helpers';
+import { bgColor, dotColors, startDots, distMult, pathBonusLength, collideCircs, collideWalls } from './Helpers';
 
 class Game {
   constructor(stage,b, g) {
@@ -22,7 +22,8 @@ class Game {
     this.lineGraphics = new PIXI.Graphics();
     this.isPolygon = false;
 
-    this.numDots = 25;
+    this.startDots = startDots;
+    this.numDots = 0;
     this.dotColors = dotColors;
 
     this.score = 0;
@@ -47,16 +48,17 @@ class Game {
 
   initDots() {
     // distribute dots in a grid to ensure no overlap
-    let dim = Math.floor(Math.sqrt(this.numDots));
-    let countWidth = Math.floor((window.innerWidth - 50)/(dim+3));
-    let countHeight = Math.floor((window.innerHeight - 50)/(dim+3));
+    let dim = Math.floor(Math.sqrt(this.startDots));
+    let countWidth = Math.floor((window.innerWidth - 1)/(dim+3));
+    let countHeight = Math.floor((window.innerHeight - 1)/(dim+3));
 
-    for (let i = 50; i < window.innerWidth-50; i+=countWidth) {
-      for (let j = 50; j < window.innerHeight-50; j+=countHeight) {
+    for (let i = 50; i < window.innerWidth-1; i+=countWidth) {
+      for (let j = 50; j < window.innerHeight-1; j+=countHeight) {
         // always guarantees that two dots will be made
         if ((i == 50 && j == 50) || (i == 50 && j == 50+countHeight)) {
           let d1 = new Dot(this.dotColors[Math.floor(Math.random() * this.dotColors.length)], [i, j], Math.random()*20+15);
           this.dots.push(d1);
+          this.numDots++;
           d1.getGraphics().forEach(e => this.stage.addChild(e));
         }
         else{
@@ -64,6 +66,7 @@ class Game {
           if (r >= 0.5) {
             let d = new Dot(this.dotColors[Math.floor(Math.random() * this.dotColors.length)], [i, j], Math.random()*20+15);
             this.dots.push(d);
+            this.numDots++;
             d.getGraphics().forEach(e => this.stage.addChild(e));
           }
         }
