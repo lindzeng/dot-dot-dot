@@ -203,7 +203,7 @@ class Game {
 
         this.score += toAdd*this.scoreMultiplier;
         this.gameBar.setScore(this.score);
-        this.lengthRemaining = this.tempLengthRemaining - 1;
+        this.lengthRemaining = this.tempLengthRemaining;
       }
       this.lineDots = [];
   }
@@ -213,7 +213,7 @@ class Game {
           this.pos = event.data.getLocalPosition(this.stage);
           let dragDist = (this.pos.x - this.lineDots[this.lineDots.length - 1].d.x)*(this.pos.x - this.lineDots[this.lineDots.length - 1].d.x)
                         + (this.pos.y - this.lineDots[this.lineDots.length - 1].d.y)*(this.pos.y - this.lineDots[this.lineDots.length - 1].d.y);
-          this.dragLengthRemaining = this.tempLengthRemaining - Math.ceil(distMult * Math.sqrt(dragDist));
+          this.dragLengthRemaining = this.tempLengthRemaining - Math.floor(distMult * Math.sqrt(dragDist));
           let mid = this.findDot(this.pos);
           if (mid !== undefined) {
               // Connect dots of the same color
@@ -232,7 +232,7 @@ class Game {
                           if (idx === 0) this.isPolygon = true;
                           let dist = (mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)*(mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)
                                      + (mid.d.y - this.lineDots[this.lineDots.length - 1].d.y)*(mid.d.y - this.lineDots[this.lineDots.length - 1].d.y);
-                          this.prevDist = Math.ceil(distMult * Math.sqrt(dist));
+                          this.prevDist = Math.floor(distMult * Math.sqrt(dist));
                           this.tempLengthRemaining -= this.prevDist;
                           this.lineDots.push(mid);
                       }
