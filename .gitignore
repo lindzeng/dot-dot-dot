@@ -1,5 +1,5 @@
 .DS_Store
 node_modules/
-#dist/app.js
-#css/*
+dist/app.js
+css/*
 .sass-cache/
