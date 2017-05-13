@@ -1,7 +1,7 @@
 export const startDots = Math.floor((window.innerWidth - 50) / 120) * Math.floor((window.innerHeight - 50) / 120);
 
 // SCORING
-export const distMult = (startDots * 0.025) / 54; // Scales based on number of dots
+export const distMult = (startDots * 0.025) / 104; // 54; // Scales based on number of dots
 export const scoreMult = 2;
 export const pathBonusLength = 7;
 export const polygonScore = 100;
