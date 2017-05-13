@@ -94,6 +94,9 @@ class Game {
       colorCount[cIdx]++;
     });
 
+    // console.log(this.dots);
+    // console.log(colorCount);
+
     let counter = 0;
     colorCount.forEach((e) => {
       if (e <= 1) counter++;
