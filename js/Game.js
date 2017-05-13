@@ -31,7 +31,7 @@ class Game {
     this.dragLengthRemaining = 100;
     this.tempLengthRemaining = 100;
     this.lengthRemaining = 100;
-    this.prevDist = 0;
+    this.dists = [];
 
     this.initWalls();
     this.initDots();
@@ -240,7 +240,8 @@ class Game {
                   if (mid === this.lineDots[this.lineDots.length - 2]) {
                       this.isPolygon = false;
                       this.lineDots.splice(this.lineDots.length - 1, 1);
-                      this.tempLengthRemaining += this.prevDist;
+                      this.tempLengthRemaining += this.dists[this.dists.length - 1];
+                      this.dists.splice(this.dists.length - 1, 1);
                   } else {
                       // If polygon, can't connect
                       if (this.isPolygon) return;
@@ -250,8 +251,8 @@ class Game {
                           if (idx === 0) this.isPolygon = true;
                           let dist = (mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)*(mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)
                                      + (mid.d.y - this.lineDots[this.lineDots.length - 1].d.y)*(mid.d.y - this.lineDots[this.lineDots.length - 1].d.y);
-                          this.prevDist = Math.floor(distMult * Math.sqrt(dist));
-                          this.tempLengthRemaining -= this.prevDist;
+                          this.dists.push(Math.floor(distMult * Math.sqrt(dist)));
+                          this.tempLengthRemaining -= this.dists[this.dists.length - 1];
                           this.lineDots.push(mid);
                       }
                   }
