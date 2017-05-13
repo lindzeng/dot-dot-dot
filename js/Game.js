@@ -22,7 +22,7 @@ class Game {
     this.lineGraphics = new PIXI.Graphics();
     this.isPolygon = false;
 
-    this.numDots = numDots;
+    this.numDots = 25;
     this.dotColors = dotColors;
 
     this.score = 0;
@@ -46,11 +46,38 @@ class Game {
   }
 
   initDots() {
-    for (let i = 0; i < this.numDots; i++) {
+    // distribute dots in a grid to ensure no overlap
+    let dim = Math.floor(Math.sqrt(this.numDots));
+    let countWidth = Math.floor((window.innerWidth - 50)/(dim+3));
+    let countHeight = Math.floor((window.innerHeight - 50)/(dim+3));
+
+    for (let i = 50; i < window.innerWidth-50; i+=countWidth) {
+      for (let j = 50; j < window.innerHeight-50; j+=countHeight) {
+        // always guarantees that two dots will be made
+        if ((i == 50 && j == 50) || (i == 50 && j == 50+countHeight)) {
+          let d1 = new Dot(this.dotColors[Math.floor(Math.random() * this.dotColors.length)], [i, j], Math.random()*20+15);
+          this.dots.push(d1);
+          d1.getGraphics().forEach(e => this.stage.addChild(e));
+        }
+        else{
+          let r = Math.random();
+          if (r >= 0.5) {
+            let d = new Dot(this.dotColors[Math.floor(Math.random() * this.dotColors.length)], [i, j], Math.random()*20+15);
+            this.dots.push(d);
+            d.getGraphics().forEach(e => this.stage.addChild(e));
+          }
+        }
+
+
+
+      }
+    }
+    console.log(this.dots);
+    /*for (let i = 0; i < this.numDots; i++) {
       let d = new Dot(this.dotColors[Math.floor(Math.random() * this.dotColors.length)]);
       this.dots.push(d);
       d.getGraphics().forEach(e => this.stage.addChild(e));
-    }
+    } */
   }
 
   initWalls() {
@@ -84,30 +111,32 @@ class Game {
   }
 
   checkEndGame() {
-    // Check if # of dots of each color are all 1
-    let isOnlyColor = [];
-    // let numAlive = 0;
-    for (let i = 0; i < this.dotColors.length; i++) {
-        isOnlyColor.push(false);
+    // Check if # of dots of each color are all 1 or 0
+    let colorCount = [];
+    for (let i = 0; i < dotColors.length; i++) {
+      colorCount.push(0);
     }
-    for (let i = 0; i < this.numDots.length; i++) {
-        if (!this.dots[i].killed) {
-            // numAlive += 1;
-            let color = this.dots[i].color;
-            let idx = this.getColorIdx(color);
-            if (isOnlyColor[idx]) {
-                return true;
-            } else {
-                isOnlyColor[idx] = true;
-            }
-        }
-    }
+
+    this.dots.forEach((d) => {
+      let cIdx = dotColors.indexOf(d.color);
+      colorCount[cIdx]++;
+    });
+
+    // console.log(this.dots);
+    // console.log(colorCount);
+
+    let counter = 0;
+    colorCount.forEach((e) => {
+      if (e <= 1) counter++;
+    });
+
+    if (counter === dotColors.length) return true;
 
     // OR no line left
     if (this.lengthRemaining <= 0) return true;
 
     // OR all dots killed
-    if (this.numAlive === 0) return true;
+    if (this.numDots === 0) return true;
 
     return false;
   }
@@ -134,6 +163,7 @@ class Game {
         // this.b.hit(dot, this.dots[j].getGraphics()[0], true, true);
         // this.b.collideCircs(dot, this.dots[j].getGraphics()[0]);
         collideCircs(d, this.dots[j]);
+        //console.log(this.dots[j].getGraphics()[0])
       }
 
       d.step();
@@ -208,7 +238,7 @@ class Game {
 
         this.score += toAdd*this.scoreMultiplier;
         this.gameBar.setScore(this.score);
-        this.lengthRemaining = this.tempLengthRemaining - 1;
+        this.lengthRemaining = this.tempLengthRemaining;
       }
       this.lineDots = [];
   }
@@ -218,7 +248,7 @@ class Game {
           this.pos = event.data.getLocalPosition(this.stage);
           let dragDist = (this.pos.x - this.lineDots[this.lineDots.length - 1].d.x)*(this.pos.x - this.lineDots[this.lineDots.length - 1].d.x)
                         + (this.pos.y - this.lineDots[this.lineDots.length - 1].d.y)*(this.pos.y - this.lineDots[this.lineDots.length - 1].d.y);
-          this.dragLengthRemaining = this.tempLengthRemaining - Math.ceil(distMult * Math.sqrt(dragDist));
+          this.dragLengthRemaining = this.tempLengthRemaining - Math.floor(distMult * Math.sqrt(dragDist));
           let mid = this.findDot(this.pos);
           if (mid !== undefined) {
               // Connect dots of the same color
@@ -237,7 +267,7 @@ class Game {
                           if (idx === 0) this.isPolygon = true;
                           let dist = (mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)*(mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)
                                      + (mid.d.y - this.lineDots[this.lineDots.length - 1].d.y)*(mid.d.y - this.lineDots[this.lineDots.length - 1].d.y);
-                          this.prevDist = Math.ceil(distMult * Math.sqrt(dist));
+                          this.prevDist = Math.floor(distMult * Math.sqrt(dist));
                           this.tempLengthRemaining -= this.prevDist;
                           this.lineDots.push(mid);
                       }

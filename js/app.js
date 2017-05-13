@@ -5,6 +5,12 @@ import GameBar from './GameBar';
 import {bgColor} from './Helpers';
 
 (() => {
+  let stats = new Stats();
+  stats.showPanel( 0); // 0: fps, 1: ms, 2: mb, 3+: custom
+  // console.log(stats);
+  let dom = stats.domElement;
+  dom.setAttribute('id', 'statsDiv');
+  document.body.appendChild( dom );
 
   let type = "WebGL";
 
@@ -45,6 +51,7 @@ import {bgColor} from './Helpers';
 
   let render = () => {
       requestAnimationFrame(render);
+      stats.begin();
       g.step();
       if(g.checkEndGame()) {
         if (!end) {
@@ -63,6 +70,7 @@ import {bgColor} from './Helpers';
       }
 
       renderer.render(stage);
+      stats.end();
   }
 
   render();

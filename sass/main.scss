@@ -4,6 +4,12 @@ body {
   overflow: hidden;
   font-family: "Arapey", serif;
 
+  #statsDiv {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 5;
+  }
   .unselectable {
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
