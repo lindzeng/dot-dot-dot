@@ -22,6 +22,7 @@ import {bgColor} from './Helpers';
   document.body.appendChild(renderer.view);
 
   let b = new Bump(PIXI);
+  // let b = new ParticlePhysics();
 
   let gameBar = new GameBar();
   let g = new Game(stage, b, gameBar);

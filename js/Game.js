@@ -1,6 +1,6 @@
 import Dot from './Dot'
 import Wall from './Wall'
-import {bgColor, dotColors, numDots, distMult, pathBonusLength} from './Helpers';
+import { bgColor, dotColors, numDots, distMult, pathBonusLength, collideCircs, collideWalls } from './Helpers';
 
 class Game {
   constructor(stage,b, g) {
@@ -54,18 +54,19 @@ class Game {
   }
 
   initWalls() {
-    let wallColor = bgColor;
+    //let wallColor = bgColor;
+    let wallColor = this.dotColors;
 
-    let wallTop = new Wall(wallColor, [0, 0, window.innerWidth, 1], [0, 0]);
+    let wallTop = new Wall(wallColor[0], [0, 0, window.innerWidth, 1], [0, 0]);
     this.stage.addChild(wallTop.getGraphics());
 
-    let wallLeft = new Wall(wallColor, [0, 0, 1, window.innerHeight], [0, 0]);
+    let wallLeft = new Wall(wallColor[1], [0, 0, 1, window.innerHeight], [0, 0]);
     this.stage.addChild(wallLeft.getGraphics());
 
-    let wallBottom = new Wall(wallColor, [0, 0, window.innerWidth, 1], [0, window.innerHeight-1]);
+    let wallBottom = new Wall(wallColor[2], [0, 0, window.innerWidth, 1], [0, window.innerHeight-1]);
     this.stage.addChild(wallBottom.getGraphics());
 
-    let wallRight = new Wall(wallColor, [0, 0, 1, window.innerHeight], [window.innerWidth-1, 0]);
+    let wallRight = new Wall(wallColor[3], [0, 0, 1, window.innerHeight], [window.innerWidth-1, 0]);
     this.stage.addChild(wallRight.getGraphics());
 
     this.walls = [wallTop, wallLeft, wallBottom, wallRight];
@@ -120,15 +121,19 @@ class Game {
 
   renderDots() {
     this.dots.forEach((d, i) => {
-      let dot = d.getGraphics()[0];
+      // let dot = d.getGraphics()[0];
 
       for (let j = 0; j < this.walls.length; j++) {
-        this.b.hit(dot, this.walls[j].getGraphics(), true, true);
+        // this.b.hit(dot, this.walls[j].getGraphics(), true, true);
+        // this.b.collideWalls(dot, this.walls[j].getGraphics());
+        collideWalls(d, this.walls[j]);
       }
 
       for (let j = 0; j < this.numDots; j++) {
         if (i === j) continue;
-        this.b.hit(dot, this.dots[j].getGraphics()[0], true, true);
+        // this.b.hit(dot, this.dots[j].getGraphics()[0], true, true);
+        // this.b.collideCircs(dot, this.dots[j].getGraphics()[0]);
+        collideCircs(d, this.dots[j]);
       }
 
       d.step();
