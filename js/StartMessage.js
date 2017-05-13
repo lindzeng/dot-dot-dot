@@ -1,3 +1,5 @@
+import { buttonSound } from './Helpers.js';
+
 class StartMessage {
   constructor(cb) {
     // this.callback = cb;
@@ -10,6 +12,7 @@ class StartMessage {
     })
 
     $('#buttonDiv').click(function() {
+      buttonSound.play();
       $('#startContainer').animate({
         top: -530
       }, 1000, 'linear');

@@ -5,6 +5,23 @@ export const pathBonusLength = 7;
 export const dotColors = [0xF9F751, 0x35CA37, 0xAE34C9, 0x2E5EC9, 0xCA3663];
 export const bgColor = 0xfffdf3;
 
+export const buttonSound = new Howl({
+  src: ['audio/button.mp3'],
+  volume: 1,
+  onend: function() {
+
+  }
+});
+
+export const byeSound = new Howl({
+  src: ['audio/bye.mp3'],
+  volume: 1,
+  onend: function() {
+
+  }
+});
+
+
 function overlap(x1, y1, r1, x2, y2, r2) {
     let dx = x1 - x2;
     let dy = y1 - y2;

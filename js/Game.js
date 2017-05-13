@@ -1,6 +1,6 @@
 import Dot from './Dot'
 import Wall from './Wall'
-import { bgColor, dotColors, startDots, distMult, pathBonusLength, overlap, collideCircs, collideWalls } from './Helpers';
+import { bgColor, dotColors, startDots, distMult, pathBonusLength, overlap, collideCircs, collideWalls, byeSound } from './Helpers';
 
 class Game {
   constructor(stage, b, g) {
@@ -247,6 +247,8 @@ class Game {
         this.lineDots.forEach((d) => {
           toAdd += d.kill();
         });
+
+        byeSound.play();
 
         this.score += toAdd*this.scoreMultiplier;
         this.gameBar.setScore(this.score);

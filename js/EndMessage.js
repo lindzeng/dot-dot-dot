@@ -1,3 +1,5 @@
+import { buttonSound } from './Helpers.js';
+
 class EndMessage {
   constructor(score, restartCB) {
     $('#restartButtonDiv').mouseenter(function() {
@@ -9,6 +11,7 @@ class EndMessage {
     })
 
     $('#restartButtonDiv').click(function() {
+      buttonSound.play();
       $('#endContainer').animate({
         top: -550
       }, 1000, 'linear');
