@@ -11,6 +11,7 @@ import {bgColor} from './Helpers';
   // console.log(stats);
   let dom = stats.domElement;
   dom.setAttribute('id', 'statsDiv');
+  $(dom).css('display', 'none');
   document.body.appendChild( dom );
 
   // Begin audio
@@ -84,4 +85,13 @@ import {bgColor} from './Helpers';
   }
 
   render();
+
+  $('body').keypress(function( event ) {
+    // D
+    if ( event.which == 100 ) {
+      $('#statsDiv').toggle();
+    } else if (event.which == 114) {
+      restartGame();
+    }
+  });
 })();
