@@ -8,7 +8,9 @@ import {bgColor} from './Helpers';
   let stats = new Stats();
   stats.showPanel( 0); // 0: fps, 1: ms, 2: mb, 3+: custom
   // console.log(stats);
-  document.body.appendChild( stats.domElement );
+  let dom = stats.domElement;
+  dom.setAttribute('id', 'statsDiv');
+  document.body.appendChild( dom );
 
   let type = "WebGL";
 
