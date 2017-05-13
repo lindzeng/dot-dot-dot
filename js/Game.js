@@ -49,8 +49,8 @@ class Game {
   initDots() {
     // distribute dots in a grid to ensure no overlap
     let dim = Math.floor(Math.sqrt(this.startDots));
-    let countWidth = Math.floor((window.innerWidth - 1)/(dim+3));
-    let countHeight = Math.floor((window.innerHeight - 1)/(dim+3));
+    let countWidth = Math.floor((window.innerWidth - 50)/(dim+3));
+    let countHeight = Math.floor((window.innerHeight - 50)/(dim+3));
 
     for (let i = 50; i < window.innerWidth-1; i+=countWidth) {
       for (let j = 50; j < window.innerHeight-1; j+=countHeight) {
