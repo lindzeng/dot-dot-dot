@@ -5,6 +5,7 @@ import GameBar from './GameBar';
 import {bgColor} from './Helpers';
 
 (() => {
+  // Begin stats
   let stats = new Stats();
   stats.showPanel( 0); // 0: fps, 1: ms, 2: mb, 3+: custom
   // console.log(stats);
@@ -12,6 +13,18 @@ import {bgColor} from './Helpers';
   dom.setAttribute('id', 'statsDiv');
   document.body.appendChild( dom );
 
+  // Begin audio
+  var background = new Howl({
+    src: ['audio/riley.mp3'],
+    autoplay: true,
+    loop: true,
+    volume: 1,
+    onend: function() {
+
+    }
+  });
+
+  // Begin render
   let type = "WebGL";
 
   if(!PIXI.utils.isWebGLSupported()) {

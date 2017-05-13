@@ -74,7 +74,7 @@ class Game {
     //   }
     // }
 
-    this.startDots = Math.floor((window.innerWidth - 50) / 100) * Math.floor((window.innerHeight - 50) / 100);
+    this.startDots = Math.floor((window.innerWidth - 50) / 120) * Math.floor((window.innerHeight - 50) / 120);
     let reselect = false;
     while (this.numDots < this.startDots) {
         let pos = { x: 35 + Math.random() * (window.innerWidth - 70), y: 35 + Math.random() * (window.innerHeight - 70) };
