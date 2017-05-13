@@ -22,7 +22,7 @@ class Game {
     this.lineGraphics = new PIXI.Graphics();
     this.isPolygon = false;
 
-    this.numDots = numDots;
+    this.numDots = 25;
     this.dotColors = dotColors;
 
     this.score = 0;
@@ -46,11 +46,38 @@ class Game {
   }
 
   initDots() {
-    for (let i = 0; i < this.numDots; i++) {
+    // distribute dots in a grid to ensure no overlap
+    let dim = Math.floor(Math.sqrt(this.numDots));
+    let countWidth = Math.floor((window.innerWidth - 50)/(dim+3));
+    let countHeight = Math.floor((window.innerHeight - 50)/(dim+3));
+
+    for (let i = 50; i < window.innerWidth-50; i+=countWidth) {
+      for (let j = 50; j < window.innerHeight-50; j+=countHeight) {
+        // always guarantees that two dots will be made
+        if ((i == 50 && j == 50) || (i == 50 && j == 50+countHeight)) {
+          let d1 = new Dot(this.dotColors[Math.floor(Math.random() * this.dotColors.length)], [i, j], Math.random()*20+15);
+          this.dots.push(d1);
+          d1.getGraphics().forEach(e => this.stage.addChild(e));
+        }
+        else{
+          let r = Math.random();
+          if (r >= 0.5) {
+            let d = new Dot(this.dotColors[Math.floor(Math.random() * this.dotColors.length)], [i, j], Math.random()*20+15);
+            this.dots.push(d);
+            d.getGraphics().forEach(e => this.stage.addChild(e));
+          }
+        }
+        
+        
+
+      }
+    }
+    console.log(this.dots);
+    /*for (let i = 0; i < this.numDots; i++) {
       let d = new Dot(this.dotColors[Math.floor(Math.random() * this.dotColors.length)]);
       this.dots.push(d);
       d.getGraphics().forEach(e => this.stage.addChild(e));
-    }
+    } */
   }
 
   initWalls() {
@@ -130,6 +157,7 @@ class Game {
 
       for (let j = 0; j < this.numDots; j++) {
         if (i === j) continue;
+        //console.log(this.dots[j].getGraphics()[0])
         this.b.hit(dot, this.dots[j].getGraphics()[0], true, true);
       }
 

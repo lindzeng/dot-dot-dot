@@ -1,4 +1,4 @@
-export const numDots = 50;
+export const numDots = 12;
 export const distMult = .01;
 export const scoreMult = 2;
 export const pathBonusLength = 7;
