@@ -73,4 +73,4 @@ function collideWalls(dot, walls) {
     }
 }
 
-export { collideCircs, collideWalls };
+export { overlap, collideCircs, collideWalls };
