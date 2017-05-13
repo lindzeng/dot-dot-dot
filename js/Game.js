@@ -1,6 +1,6 @@
 import Dot from './Dot'
 import Wall from './Wall'
-import { bgColor, dotColors, startDots, distMult, pathBonusLength, overlap, collideCircs, collideWalls, byeSound } from './Helpers';
+import { bgColor, dotColors, startDots, distMult, polygonScore, pathBonusLength, overlap, collideCircs, collideWalls, byeSound } from './Helpers';
 
 class Game {
   constructor(stage, g) {
@@ -46,33 +46,6 @@ class Game {
   }
 
   initDots() {
-    // Distribute dots in a grid to ensure no overlap
-    // let dim = Math.floor(Math.sqrt(this.startDots));
-    // let dim = Math.floor(Math.sqrt(35)); // based on max radius of dots
-    // let countWidth = Math.floor((window.innerWidth - 50)/(dim+3));
-    // let countHeight = Math.floor((window.innerHeight - 50)/(dim+3));
-    //
-    // for (let i = 50; i < window.innerWidth-1; i+=countWidth) {
-    //   for (let j = 50; j < window.innerHeight-1; j+=countHeight) {
-    //     // always guarantees that two dots will be made
-    //     if ((i === 50 && j === 50) || (i === 50 && j === 50+countHeight)) {
-    //       let d1 = new Dot(this.dotColors[Math.floor(Math.random() * this.dotColors.length)], [i, j], Math.random()*20+15);
-    //       this.dots.push(d1);
-    //       this.numDots++;
-    //       d1.getGraphics().forEach(e => this.stage.addChild(e));
-    //     }
-    //     else {
-    //       let r = Math.random();
-    //       if (r >= 0.5) {
-    //         let d = new Dot(this.dotColors[Math.floor(Math.random() * this.dotColors.length)], [i, j], Math.random()*20+15);
-    //         this.dots.push(d);
-    //         this.numDots++;
-    //         d.getGraphics().forEach(e => this.stage.addChild(e));
-    //       }
-    //     }
-    //   }
-    // }
-
     let reselect = false;
     while (this.numDots < this.startDots) {
         let pos = { x: 35 + Math.random() * (window.innerWidth - 70), y: 35 + Math.random() * (window.innerHeight - 70) };
@@ -95,7 +68,6 @@ class Game {
 
   initWalls() {
     let wallColor = bgColor;
-    //let wallColor = this.dotColors;
 
     let wallTop = new Wall(wallColor, [0, 0, window.innerWidth, 1], [0, 0]);
     this.stage.addChild(wallTop.getGraphics());
@@ -135,9 +107,6 @@ class Game {
       colorCount[cIdx]++;
     });
 
-    // console.log(this.dots);
-    // console.log(colorCount);
-
     let counter = 0;
     colorCount.forEach((e) => {
       if (e <= 1) counter++;
@@ -163,7 +132,6 @@ class Game {
 
   renderDots() {
     this.dots.forEach((d, i) => {
-      // let dot = d.getGraphics()[0];
 
     collideWalls(d, this.walls);
 
@@ -236,13 +204,13 @@ class Game {
 
   onDragEnd() {
       this.dragging = false;
-      this.isPolygon = false;
       if (this.lineDots.length > 1) {
         let toAdd = 0;
         this.lineDots.forEach((d) => {
           toAdd += d.kill();
         });
-
+      if (this.isPolygon) toAdd += polygonScore;
+        this.isPolygon = false;
         byeSound.play();
 
         this.score += toAdd*this.scoreMultiplier;
