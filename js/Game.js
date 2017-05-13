@@ -3,7 +3,7 @@ import Wall from './Wall'
 import { bgColor, dotColors, startDots, distMult, pathBonusLength, collideCircs, collideWalls } from './Helpers';
 
 class Game {
-  constructor(stage,b, g) {
+  constructor(stage, b, g) {
     this.stage = stage;
     this.gameBar = g;
     this.stage.interactive = true;
@@ -12,7 +12,7 @@ class Game {
         .on('pointerup', this.onDragEnd.bind(this))
         .on('pointerupoutside', this.onDragEnd.bind(this))
         .on('pointermove', this.onDragMove.bind(this));
-    this.b = b;
+    this.b = b; // NOTE: never used
 
     this.dots = [];
     this.walls = {};
@@ -47,21 +47,22 @@ class Game {
   }
 
   initDots() {
-    // distribute dots in a grid to ensure no overlap
-    let dim = Math.floor(Math.sqrt(this.startDots));
+    // Distribute dots in a grid to ensure no overlap
+    // let dim = Math.floor(Math.sqrt(this.startDots));
+    let dim = Math.floor(Math.sqrt(35)); // based on max radius of dots
     let countWidth = Math.floor((window.innerWidth - 50)/(dim+3));
     let countHeight = Math.floor((window.innerHeight - 50)/(dim+3));
 
     for (let i = 50; i < window.innerWidth-1; i+=countWidth) {
       for (let j = 50; j < window.innerHeight-1; j+=countHeight) {
         // always guarantees that two dots will be made
-        if ((i == 50 && j == 50) || (i == 50 && j == 50+countHeight)) {
+        if ((i === 50 && j === 50) || (i === 50 && j === 50+countHeight)) {
           let d1 = new Dot(this.dotColors[Math.floor(Math.random() * this.dotColors.length)], [i, j], Math.random()*20+15);
           this.dots.push(d1);
           this.numDots++;
           d1.getGraphics().forEach(e => this.stage.addChild(e));
         }
-        else{
+        else {
           let r = Math.random();
           if (r >= 0.5) {
             let d = new Dot(this.dotColors[Math.floor(Math.random() * this.dotColors.length)], [i, j], Math.random()*20+15);
@@ -70,33 +71,25 @@ class Game {
             d.getGraphics().forEach(e => this.stage.addChild(e));
           }
         }
-
-
-
       }
     }
-    console.log(this.dots);
-    /*for (let i = 0; i < this.numDots; i++) {
-      let d = new Dot(this.dotColors[Math.floor(Math.random() * this.dotColors.length)]);
-      this.dots.push(d);
-      d.getGraphics().forEach(e => this.stage.addChild(e));
-    } */
+
   }
 
   initWalls() {
-    //let wallColor = bgColor;
-    let wallColor = this.dotColors;
+    let wallColor = bgColor;
+    //let wallColor = this.dotColors;
 
-    let wallTop = new Wall(wallColor[0], [0, 0, window.innerWidth, 1], [0, 0]);
+    let wallTop = new Wall(wallColor, [0, 0, window.innerWidth, 1], [0, 0]);
     this.stage.addChild(wallTop.getGraphics());
 
-    let wallLeft = new Wall(wallColor[1], [0, 0, 1, window.innerHeight], [0, 0]);
+    let wallLeft = new Wall(wallColor, [0, 0, 1, window.innerHeight], [0, 0]);
     this.stage.addChild(wallLeft.getGraphics());
 
-    let wallBottom = new Wall(wallColor[2], [0, 0, window.innerWidth, 1], [0, window.innerHeight-1]);
+    let wallBottom = new Wall(wallColor, [0, 0, window.innerWidth, 1], [0, window.innerHeight-1]);
     this.stage.addChild(wallBottom.getGraphics());
 
-    let wallRight = new Wall(wallColor[3], [0, 0, 1, window.innerHeight], [window.innerWidth-1, 0]);
+    let wallRight = new Wall(wallColor, [0, 0, 1, window.innerHeight], [window.innerWidth-1, 0]);
     this.stage.addChild(wallRight.getGraphics());
 
     this.walls = {top: wallTop, left: wallLeft, bottom: wallBottom, right: wallRight};

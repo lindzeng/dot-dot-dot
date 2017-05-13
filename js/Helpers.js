@@ -1,4 +1,4 @@
-export const startDots = 50;
+export const startDots = 35;
 export const distMult = .01;
 export const scoreMult = 2;
 export const pathBonusLength = 7;
@@ -39,33 +39,37 @@ function collideWalls(dot, walls) {
     // dot collides with left wall
     if (left < 1 ) {
         d.vx = -d.vx;
-        d.beginFill(walls.left.color);
-        d.drawCircle(0, 0, radius);
-        d.endFill();
+        // dot.color = walls.left.color;
+        // d.beginFill(walls.left.color);
+        // d.drawCircle(0, 0, radius);
+        // d.endFill();
     }
 
     // dot collides with right wall
     else if (right > window.innerWidth-1) {
         d.vx = -d.vx;
-        d.beginFill(walls.right.color);
-        d.drawCircle(0, 0, radius);
-        d.endFill();
+        // dot.color = walls.right.color;
+        // d.beginFill(walls.right.color);
+        // d.drawCircle(0, 0, radius);
+        // d.endFill();
     }
 
     // dot collids with top wall
     else if (top < 1 ) {
         d.vy = -d.vy;
-        d.beginFill(walls.top.color);
-        d.drawCircle(0, 0, radius);
-        d.endFill();
+        // dot.color = walls.top.color;
+        // d.beginFill(walls.top.color);
+        // d.drawCircle(0, 0, radius);
+        // d.endFill();
     }
 
     // dot collides with bottom wall
     else if ( bottom > window.innerHeight-1) {
         d.vy = -d.vy;
-        d.beginFill(walls.bottom.color);
-        d.drawCircle(0, 0, radius);
-        d.endFill();
+        // dot.color = walls.bottom.color;
+        // d.beginFill(walls.bottom.color);
+        // d.drawCircle(0, 0, radius);
+        // d.endFill();
     }
 }
 
