@@ -83,30 +83,29 @@ class Game {
   }
 
   checkEndGame() {
-    // Check if # of dots of each color are all 1
-    let isOnlyColor = [];
-    // let numAlive = 0;
-    for (let i = 0; i < this.dotColors.length; i++) {
-        isOnlyColor.push(false);
+    // Check if # of dots of each color are all 1 or 0
+    let colorCount = [];
+    for (let i = 0; i < dotColors.length; i++) {
+      colorCount.push(0);
     }
-    for (let i = 0; i < this.numDots.length; i++) {
-        if (!this.dots[i].killed) {
-            // numAlive += 1;
-            let color = this.dots[i].color;
-            let idx = this.getColorIdx(color);
-            if (isOnlyColor[idx]) {
-                return true;
-            } else {
-                isOnlyColor[idx] = true;
-            }
-        }
-    }
+
+    this.dots.forEach((d) => {
+      let cIdx = dotColors.indexOf(d.color);
+      colorCount[cIdx]++;
+    });
+
+    let counter = 0;
+    colorCount.forEach((e) => {
+      if (e <= 1) counter++;
+    });
+
+    if (counter === dotColors.length) return true;
 
     // OR no line left
     if (this.lengthRemaining <= 0) return true;
 
     // OR all dots killed
-    if (this.numAlive === 0) return true;
+    if (this.numDots === 0) return true;
 
     return false;
   }
