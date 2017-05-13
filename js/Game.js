@@ -15,7 +15,7 @@ class Game {
     this.b = b;
 
     this.dots = [];
-    this.walls = [];
+    this.walls = {};
 
     this.lineDots = [];
     this.lineColor = 0xffffff;
@@ -96,7 +96,7 @@ class Game {
     let wallRight = new Wall(wallColor[3], [0, 0, 1, window.innerHeight], [window.innerWidth-1, 0]);
     this.stage.addChild(wallRight.getGraphics());
 
-    this.walls = [wallTop, wallLeft, wallBottom, wallRight];
+    this.walls = {top: wallTop, left: wallLeft, bottom: wallBottom, right: wallRight};
   }
 
   step() {
@@ -152,11 +152,8 @@ class Game {
     this.dots.forEach((d, i) => {
       // let dot = d.getGraphics()[0];
 
-      for (let j = 0; j < this.walls.length; j++) {
-        // this.b.hit(dot, this.walls[j].getGraphics(), true, true);
-        // this.b.collideWalls(dot, this.walls[j].getGraphics());
-        collideWalls(d, this.walls[j]);
-      }
+    collideWalls(d, this.walls);
+
 
       for (let j = 0; j < this.numDots; j++) {
         if (i === j) continue;

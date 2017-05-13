@@ -28,7 +28,7 @@ function collideCircs(dot1, dot2) {
     }
 }
 
-function collideWalls(dot, wall) {
+function collideWalls(dot, walls) {
     let radius = dot.rad;
     let d = dot.d;
     let left = d.x - radius;
@@ -38,32 +38,32 @@ function collideWalls(dot, wall) {
 
     // dot collides with left wall
     if (left < 1 ) {
-        d.vx = 1;
-        d.beginFill(wall.color);
+        d.vx = -d.vx;
+        d.beginFill(walls.left.color);
         d.drawCircle(0, 0, radius);
         d.endFill();
     }
 
     // dot collides with right wall
-    if (right > window.innerWidth-1) {
-        d.vx = -1;
-        d.beginFill(wall.color);
+    else if (right > window.innerWidth-1) {
+        d.vx = -d.vx;
+        d.beginFill(walls.right.color);
         d.drawCircle(0, 0, radius);
         d.endFill();
     }
 
     // dot collids with top wall
-    if (top < 1 ) {
-        d.vy = 1;
-        d.beginFill(wall.color);
+    else if (top < 1 ) {
+        d.vy = -d.vy;
+        d.beginFill(walls.top.color);
         d.drawCircle(0, 0, radius);
         d.endFill();
     }
 
     // dot collides with bottom wall
-    if ( bottom > window.innerHeight-1) {
-        d.vy = -1;
-        d.beginFill(wall.color);
+    else if ( bottom > window.innerHeight-1) {
+        d.vy = -d.vy;
+        d.beginFill(walls.bottom.color);
         d.drawCircle(0, 0, radius);
         d.endFill();
     }
