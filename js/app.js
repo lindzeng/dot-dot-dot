@@ -73,7 +73,7 @@ import {bgColor} from './Helpers';
         if (g.numDots == 0) {
           gameBar.restart();
           stage = new PIXI.Container();
-          g = new Game(stage, b, gameBar);
+          g = new Game(stage, gameBar);
           end = null;
           restart = false;
         }
