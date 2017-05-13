@@ -26,8 +26,8 @@ class Dot {
     this.o.lineStyle(.5, 0x000000);  // (thickness, color)
     this.o.drawCircle(0, 0, this.rad);
     this.o.endFill();
-    this.o.x = p[0] - this.d.vx*2;
-    this.o.y = p[1] - this.d.vy*2;
+    this.o.x = p[0] - this.d.vx*2.5;
+    this.o.y = p[1] - this.d.vy*2.5;
     this.o.scale.x = this.scale;
     this.o.scale.y = this.scale;
     this.o.circular = true;
@@ -53,8 +53,8 @@ class Dot {
     this.d.x += this.d.vx;
     this.d.y += this.d.vy;
 
-    this.o.x = this.d.x - this.d.vx*2;
-    this.o.y = this.d.y - this.d.vy*2;
+    this.o.x = this.d.x - this.d.vx*2.5;
+    this.o.y = this.d.y - this.d.vy*2.5;
 
     if (this.killed) {
       this.scale -= .2;

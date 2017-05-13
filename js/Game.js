@@ -3,7 +3,7 @@ import Wall from './Wall'
 import { bgColor, dotColors, startDots, distMult, pathBonusLength, overlap, collideCircs, collideWalls, byeSound } from './Helpers';
 
 class Game {
-  constructor(stage, b, g) {
+  constructor(stage, g) {
     this.stage = stage;
     this.gameBar = g;
     this.stage.interactive = true;
@@ -12,7 +12,6 @@ class Game {
         .on('pointerup', this.onDragEnd.bind(this))
         .on('pointerupoutside', this.onDragEnd.bind(this))
         .on('pointermove', this.onDragMove.bind(this));
-    this.b = b; // NOTE: never used
 
     this.dots = [];
     this.walls = {};
@@ -74,7 +73,6 @@ class Game {
     //   }
     // }
 
-    this.startDots = Math.floor((window.innerWidth - 50) / 120) * Math.floor((window.innerHeight - 50) / 120);
     let reselect = false;
     while (this.numDots < this.startDots) {
         let pos = { x: 35 + Math.random() * (window.innerWidth - 70), y: 35 + Math.random() * (window.innerHeight - 70) };
@@ -172,10 +170,7 @@ class Game {
 
       for (let j = 0; j < this.numDots; j++) {
         if (i === j) continue;
-        // this.b.hit(dot, this.dots[j].getGraphics()[0], true, true);
-        // this.b.collideCircs(dot, this.dots[j].getGraphics()[0]);
         collideCircs(d, this.dots[j]);
-        //console.log(this.dots[j].getGraphics()[0])
       }
 
       d.step();

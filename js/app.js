@@ -40,11 +40,8 @@ import {bgColor} from './Helpers';
   renderer.backgroundColor = bgColor;
   document.body.appendChild(renderer.view);
 
-  let b = new Bump(PIXI);
-  // let b = new ParticlePhysics();
-
   let gameBar = new GameBar();
-  let g = new Game(stage, b, gameBar);
+  let g = new Game(stage, gameBar);
 
   let startGame = () => {
     gameBar.init();
