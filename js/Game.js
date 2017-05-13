@@ -28,6 +28,7 @@ class Game {
     this.score = 0;
     this.scoreMultiplier = 1;
 
+    this.dragLengthRemaining = 100;
     this.tempLengthRemaining = 100;
     this.lengthRemaining = 100;
     this.prevDist = 0;
@@ -161,10 +162,10 @@ class Game {
       this.dragLine.moveTo(this.lineDots[this.lineDots.length-1].d.x, this.lineDots[this.lineDots.length-1].d.y);
       this.dragLine.lineTo(this.pos.x, this.pos.y);
       this.stage.addChild(this.dragLine);
-      this.gameBar.setPercentRemaining(this.tempLengthRemaining);
+      this.gameBar.setPercentRemaining(this.dragLengthRemaining);
     } else {
       this.stage.removeChild(this.dragLine);
-      this.gameBar.setPercentRemaining(this.lengthRemaining);
+      this.gameBar.setPercentRemaining(this.tempLengthRemaining);
     }
   }
 
@@ -202,6 +203,7 @@ class Game {
 
         this.score += toAdd*this.scoreMultiplier;
         this.gameBar.setScore(this.score);
+        this.lengthRemaining = this.tempLengthRemaining - 1;
       }
       this.lineDots = [];
   }
@@ -209,9 +211,9 @@ class Game {
   onDragMove(event) {
       if (this.dragging) {
           this.pos = event.data.getLocalPosition(this.stage);
-          let tempDist = (this.pos.x - this.lineDots[this.lineDots.length - 1].d.x)*(this.pos.x - this.lineDots[this.lineDots.length - 1].d.x)
+          let dragDist = (this.pos.x - this.lineDots[this.lineDots.length - 1].d.x)*(this.pos.x - this.lineDots[this.lineDots.length - 1].d.x)
                         + (this.pos.y - this.lineDots[this.lineDots.length - 1].d.y)*(this.pos.y - this.lineDots[this.lineDots.length - 1].d.y);
-          this.tempLengthRemaining = this.lengthRemaining - Math.ceil(distMult * Math.sqrt(tempDist));
+          this.dragLengthRemaining = this.tempLengthRemaining - Math.ceil(distMult * Math.sqrt(dragDist));
           let mid = this.findDot(this.pos);
           if (mid !== undefined) {
               // Connect dots of the same color
@@ -220,7 +222,7 @@ class Game {
                   if (mid === this.lineDots[this.lineDots.length - 2]) {
                       this.isPolygon = false;
                       this.lineDots.splice(this.lineDots.length - 1, 1);
-                      this.lengthRemaining += this.prevDist;
+                      this.tempLengthRemaining += this.prevDist;
                   } else {
                       // If polygon, can't connect
                       if (this.isPolygon) return;
@@ -231,7 +233,7 @@ class Game {
                           let dist = (mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)*(mid.d.x - this.lineDots[this.lineDots.length - 1].d.x)
                                      + (mid.d.y - this.lineDots[this.lineDots.length - 1].d.y)*(mid.d.y - this.lineDots[this.lineDots.length - 1].d.y);
                           this.prevDist = Math.ceil(distMult * Math.sqrt(dist));
-                          this.lengthRemaining -= this.prevDist;
+                          this.tempLengthRemaining -= this.prevDist;
                           this.lineDots.push(mid);
                       }
                   }
