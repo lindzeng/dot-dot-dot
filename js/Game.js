@@ -118,7 +118,13 @@ class Game {
     if (this.lengthRemaining <= 0) return true;
 
     // OR all dots killed
-    if (this.numDots === 0) return true;
+    if (this.numDots === 0) {
+      this.score += this.lengthRemaining*10;
+      this.gameBar.setScore(this.score);
+      this.gameBar.setPercentRemaining(this.lengthRemaining, true);
+
+      return true;
+    }
 
     return false;
   }

@@ -1,7 +1,7 @@
 export const startDots = Math.floor((window.innerWidth - 50) / 120) * Math.floor((window.innerHeight - 50) / 120);
 
 // SCORING
-export const distMult = .05;
+export const distMult = (startDots * 0.025) / 54; // Scales based on number of dots
 export const scoreMult = 2;
 export const pathBonusLength = 7;
 export const polygonScore = 100;
@@ -24,7 +24,6 @@ export const byeSound = new Howl({
 
   }
 });
-
 
 function overlap(x1, y1, r1, x2, y2, r2) {
     let dx = x1 - x2;

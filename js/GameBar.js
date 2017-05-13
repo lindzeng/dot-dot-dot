@@ -38,9 +38,13 @@ class GameBar {
     });
   }
 
-  setPercentRemaining(remain) {
+  setPercentRemaining(remain, colorFlag) {
+    let cf = colorFlag ? colorFlag : false;
     remain = Math.min(Math.max(remain, 0), 100);
+
     $('#remaining').text(remain + '%');
+
+    if (cf) return;
     if (remain <= 20) {
       $('#remaining').css({color: 'red'});
     } else {
