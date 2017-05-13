@@ -4,6 +4,7 @@ export const startDots = Math.floor((window.innerWidth - 50) / 120) * Math.floor
 export const distMult = .05;
 export const scoreMult = 2;
 export const pathBonusLength = 7;
+export const polygonScore = 50;
 
 export const dotColors = [0xF9F751, 0x35CA37, 0xAE34C9, 0x2E5EC9, 0xCA3663];
 export const bgColor = 0xfffdf3;
