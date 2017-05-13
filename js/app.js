@@ -15,7 +15,7 @@ import {bgColor} from './Helpers';
   document.body.appendChild( dom );
 
   // Begin audio
-  var background = new Howl({
+  let background = new Howl({
     src: ['audio/riley.mp3'],
     autoplay: true,
     loop: true,
@@ -87,11 +87,18 @@ import {bgColor} from './Helpers';
   render();
 
   $('body').keypress(function( event ) {
-    // D
-    if ( event.which == 100 ) {
+    if ( event.key === 't' ) {
+      // T
       $('#statsDiv').toggle();
-    } else if (event.which == 114) {
+    } else if (event.key === 'r') {
+      // R
       restartGame();
+    } else if (event.key === 'm') {
+      // M
+      if (background.volume() === 0.0)
+        background.volume(1.0);
+      else
+        background.volume(0.0);
     }
   });
 })();
